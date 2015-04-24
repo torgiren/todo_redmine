@@ -3529,8 +3529,8 @@ _ACEOF
 
 else
 
-            echo "libcurl-dev not found"
-            exit -1
+             as_fn_error $? "libcurl-dev not found" "$LINENO" 5
+
 fi
 
 

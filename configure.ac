@@ -11,9 +11,10 @@ AC_CONFIG_HEADERS([config.h])
 AC_PROG_CC
 
 # Checks for libraries.
-AC_CHECK_LIB([curl], [curl_global_init],[],[
-            echo "libcurl-dev not found"
-            exit -1])
+AC_CHECK_LIB([curl], [curl_global_init],[],
+             [
+             AC_MSG_ERROR([libcurl-dev not found])
+             ])
 
 # Checks for header files.
 
