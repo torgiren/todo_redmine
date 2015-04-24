@@ -85,6 +85,7 @@ am__aclocal_m4_deps = $(top_srcdir)/configure.ac
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 	$(ACLOCAL_M4)
 mkinstalldirs = $(install_sh) -d
+CONFIG_HEADER = $(top_builddir)/config.h
 CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
 am__installdirs = "$(DESTDIR)$(sbindir)"
@@ -104,7 +105,7 @@ AM_V_at = $(am__v_at_$(V))
 am__v_at_ = $(am__v_at_$(AM_DEFAULT_VERBOSITY))
 am__v_at_0 = @
 am__v_at_1 = 
-DEFAULT_INCLUDES = -I.
+DEFAULT_INCLUDES = -I. -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
 am__mv = mv -f
@@ -159,7 +160,7 @@ CCDEPMODE = depmode=gcc3
 CFLAGS = -g -O2
 CPPFLAGS = 
 CYGPATH_W = echo
-DEFS = -DPACKAGE_NAME=\"todo-redmine\" -DPACKAGE_TARNAME=\"todo-redmine\" -DPACKAGE_VERSION=\"0.1\" -DPACKAGE_STRING=\"todo-redmine\ 0.1\" -DPACKAGE_BUGREPORT=\"todo-redmine@fabrykowski.pl\" -DPACKAGE_URL=\"\" -DPACKAGE=\"todo-redmine\" -DVERSION=\"0.1\" -DHAVE_LIBCURL=1
+DEFS = -DHAVE_CONFIG_H
 DEPDIR = .deps
 ECHO_C = 
 ECHO_N = -n
@@ -232,7 +233,7 @@ top_build_prefix = ../
 top_builddir = ..
 top_srcdir = ..
 AMFLAGS = --pedantic --Wall -O2
-AM_LDFLAGS = 
+AM_LDFLAGS = $(CURL_LIBS)
 todo_redmine_SOURCES = todo_redmine.c
 all: all-am
 

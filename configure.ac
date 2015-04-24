@@ -5,7 +5,7 @@ AC_PREREQ([2.69])
 AC_INIT([todo-redmine], [0.1], [todo-redmine@fabrykowski.pl])
 AM_INIT_AUTOMAKE
 AC_CONFIG_SRCDIR([src/todo_redmine.c])
-#AC_CONFIG_HEADERS([config.h])
+AC_CONFIG_HEADERS([config.h])
 
 # Checks for programs.
 AC_PROG_CC
