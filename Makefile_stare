@@ -1,0 +1,8 @@
+GCC=gcc
+CFLAGS=-O2 $(curl-config --cflags) -I.
+LDFLAGS=$(curl-config --libs) -lcurl
+todo-redmine: todo-redmine.o
+	${GCC} $<  -o $@ ${LDFLAGS}
+
+%.o: %.c
+	${GCC} -c $< -o $@ ${CFLAGS}
