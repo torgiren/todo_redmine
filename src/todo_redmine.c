@@ -78,13 +78,33 @@ int main()
         json_t *project, *author;
         project = json_object_get(value, "project");
         author = json_object_get(value, "author"); 
-        printf("%d - %s - %s - %s - %s\n",
-                (int)json_integer_value(json_object_get(value,"id")),
+        printf("%d\t%s\t%s\t%s\t%s\n",
+                (int)index,
                 json_string_value(json_object_get(project,"name")),
                 json_string_value(json_object_get(author,"name")),
                 json_string_value(json_object_get(value,"subject")),
                 json_string_value(json_object_get(value,"created_on"))
               );
+    }
+    int choice=0;
+    while(choice>=0)
+    {
+        printf("Podaj numer: ");
+        scanf("%d", &choice);
+        json_t *obj = json_array_get(issues, choice);
+        printf("id:\t%d\n\
+author:\t%s\n\
+subcject:\t%s\n\
+desc:\t%s\n\
+created:\t%s\n\n",
+
+                (int)json_integer_value(json_object_get(obj, "id")),
+                json_string_value(json_object_get(json_object_get(obj,"author"),"name")),
+                json_string_value(json_object_get(obj, "subject")),
+                json_string_value(json_object_get(obj, "description")),
+                json_string_value(json_object_get(obj, "created_on"))
+            );
+
     }
     json_decref(root);
     return 0;
