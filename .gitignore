@@ -10,3 +10,5 @@ src/.todo_redmine.c.swp
 src/Makefile
 src/todo_redmine
 stamp-h1
+config.h.in
+configure
