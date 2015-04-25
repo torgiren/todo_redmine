@@ -15,6 +15,10 @@ AC_CHECK_LIB([curl], [curl_global_init],[],
              [
              AC_MSG_ERROR([libcurl-dev not found])
              ])
+AC_CHECK_LIB([jansson], [json_loads],[],
+             [
+             AC_MSG_ERROR([libjansson-dev not found])
+             ])
 
 # Checks for header files.
 
