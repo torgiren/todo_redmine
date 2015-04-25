@@ -1,1 +1,12 @@
+*.swp
+*.o
 autom4te.cache/
+Makefile
+config.h
+config.log
+config.status
+src/.deps/
+src/.todo_redmine.c.swp
+src/Makefile
+src/todo_redmine
+stamp-h1
