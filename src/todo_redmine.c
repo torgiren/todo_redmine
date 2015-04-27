@@ -2,63 +2,27 @@
 #include<stdlib.h>
 #include<string.h>
 #include<assert.h>
-#include<curl/curl.h>
+#include<unistd.h>
+#include<errno.h>
 #include<jansson.h>
-struct message
-{
-    char *str;
-    int len;
-};
+#include"curl_redmine.h"
 
-int free_msg(struct message* msg);
-static size_t write_data(void *ptr, size_t size, size_t nmemb, void *usrptr);
 
 int main()
 {
-    CURL *curl;
-    CURLcode res;
-
-    curl = curl_easy_init();
-    if(!curl)
+    if(curl_redmine_init("5b1cb3c5ded0b8b2287b6609e95d9e79adc57ce4") < 0)
     {
-        fprintf(stderr, "Problem z curl_easy_init()");
-        return -1;
-    }
-
-    struct message recv_msg = {NULL, 0};
-
-    struct curl_slist * headers = NULL;
-    headers = curl_slist_append(headers, "Content-Type: application/json");
-    headers = curl_slist_append(headers, "X-Redmine-API-Key: 5b1cb3c5ded0b8b2287b6609e95d9e79adc57ce4");
-
-    curl_easy_setopt(curl, CURLOPT_URL, "http://redmine.exphost.pl/issues.json");
-    curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
-    curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, write_data);
-    curl_easy_setopt(curl, CURLOPT_WRITEDATA, &recv_msg);
-
-    res = curl_easy_perform(curl);
-    if(res != CURLE_OK)
-    {
-        fprintf(stderr, "curl perform error: %s\n", curl_easy_strerror(res));
+        fprintf(stderr, "Problem z curl_init\n");
         return -1;
     }
     
-    if(recv_msg.str && recv_msg.len)
-    {
-        printf("%s\n", recv_msg.str);
-        printf("%d\n", recv_msg.len);
-    }
-    else
-    {
-        printf("Nic do wypisania\n");
-    }
-    curl_slist_free_all(headers);
-    curl_easy_cleanup(curl);
 
     json_t* root;
     json_error_t error;
-    root = json_loads(recv_msg.str, 0, &error);
-    free_msg(&recv_msg);
+//    root = json_loads(recv_msg.str, 0, &error);
+//    free_msg(&recv_msg);
+    root = curl_redmine_get_issues();
+    printf("%x\n", root);
 
     if(!root)
     {
@@ -86,11 +50,28 @@ int main()
                 json_string_value(json_object_get(value,"created_on"))
               );
     }
-    int choice=0;
-    while(choice>=0)
+    int len=0;
+    char *input = malloc(255);
+    int choice;
+    while(1)
     {
         printf("Podaj numer: ");
-        scanf("%d", &choice);
+        fflush(stdout);
+        len = read(0, (void*)input, (size_t)255);
+        if(!len)
+            continue;
+        input[len]='\0';
+        printf("input: %s\n", input);
+        char *endptr = NULL;
+        choice = strtol(input, &endptr, 10);
+        if(errno || input==endptr)
+        {
+            fprintf(stderr, "Błędna wartość\n");
+            continue;
+        }
+        printf("%d\n", errno);
+        printf("%d\n", choice);
+
         json_t *obj = json_array_get(issues, choice);
         printf("id:\t%d\n\
 author:\t%s\n\
@@ -107,23 +88,6 @@ created:\t%s\n\n",
 
     }
     json_decref(root);
+    curl_redmine_cleanup();
     return 0;
-}
-static size_t write_data(void *ptr, size_t size, size_t nmemb, void *usrptr)
-{
-    struct message *data = (struct message*)usrptr;
-    int start = data->len;
-    data->len += size * nmemb;
-    data->str = realloc(data->str, data->len);
-    strncpy(&data->str[start], ptr, size*nmemb);
-    return size * nmemb;
-}
-int free_msg(struct message* msg)
-{
-    if(msg->str)
-    {
-        free(msg->str);
-    }
-    msg->str = NULL;
-    msg->len = 0;
 }
