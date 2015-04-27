@@ -22,7 +22,6 @@ int main()
 //    root = json_loads(recv_msg.str, 0, &error);
 //    free_msg(&recv_msg);
     root = curl_redmine_get_issues();
-    printf("%x\n", root);
 
     if(!root)
     {

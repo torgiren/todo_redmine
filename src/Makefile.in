@@ -90,7 +90,8 @@ CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
 am__installdirs = "$(DESTDIR)$(sbindir)"
 PROGRAMS = $(sbin_PROGRAMS)
-am_todo_redmine_OBJECTS = todo_redmine.$(OBJEXT)
+am_todo_redmine_OBJECTS = todo_redmine.$(OBJEXT) \
+	curl_redmine.$(OBJEXT)
 todo_redmine_OBJECTS = $(am_todo_redmine_OBJECTS)
 todo_redmine_LDADD = $(LDADD)
 AM_V_P = $(am__v_P_@AM_V@)
@@ -234,7 +235,7 @@ top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 AMFLAGS = --pedantic --Wall -O2
 AM_LDFLAGS = $(CURL_LIBS)
-todo_redmine_SOURCES = todo_redmine.c
+todo_redmine_SOURCES = todo_redmine.c curl_redmine.c
 all: all-am
 
 .SUFFIXES:
@@ -322,6 +323,7 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/curl_redmine.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/todo_redmine.Po@am__quote@
 
 .c.o:
