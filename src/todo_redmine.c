@@ -6,33 +6,14 @@
 #include<errno.h>
 #include<jansson.h>
 #include"curl_redmine.h"
+#include"interface.h"
 
 
 int main()
 {
-    if(curl_redmine_init("5b1cb3c5ded0b8b2287b6609e95d9e79adc57ce4") < 0)
-    {
-        fprintf(stderr, "Problem z curl_init\n");
-        return -1;
-    }
-    
+    struct redmine_t *redmine;
 
-    json_t *issues = curl_redmine_get_issues();
-    size_t index;
-    json_t *value;
-    json_array_foreach(issues, index, value)
-    {
-        json_t *project, *author;
-        project = json_object_get(value, "project");
-        author = json_object_get(value, "author"); 
-        printf("%d\t%s\t%s\t%s\t%s\n",
-                (int)index,
-                json_string_value(json_object_get(project,"name")),
-                json_string_value(json_object_get(author,"name")),
-                json_string_value(json_object_get(value,"subject")),
-                json_string_value(json_object_get(value,"created_on"))
-              );
-    }
+    print_issues();
     int len=0;
     char *input = malloc(255);
     int choice;
