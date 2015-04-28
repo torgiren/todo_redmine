@@ -1,5 +1,6 @@
 #include<string.h>
 #include "curl_redmine.h"
+#include<jansson.h>
 int curl_redmine_init(char* api_key)
 {
    _CURL_REDMINE_HANDLER = curl_easy_init();
@@ -21,6 +22,11 @@ int curl_redmine_init(char* api_key)
 json_t* curl_redmine_get_issues()
 {
     json_t *result = curl_redmine_perform("http://redmine.exphost.pl/issues.json");
+    if((!(result=json_object_get(result, "issues"))) || (!json_is_array(result)))
+    {
+        fprintf(stderr, "Blad pobierania danych\n");
+        return 0;
+    }
     return result;
 } 
 json_t* curl_redmine_perform(char* url)
@@ -38,6 +44,11 @@ json_t* curl_redmine_perform(char* url)
     }
     json_error_t error;
     json_t *result = json_loads(recv_msg.str, 0, &error);
+    if(!result)
+    {
+        fprintf(stderr, "Problem z json loads\n%d\t%s\n", error.line, error.text);
+        return 0;
+    }
 
     if(recv_msg.str && recv_msg.len)
     {

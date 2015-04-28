@@ -17,23 +17,7 @@ int main()
     }
     
 
-    json_t* root;
-    json_error_t error;
-//    root = json_loads(recv_msg.str, 0, &error);
-//    free_msg(&recv_msg);
-    root = curl_redmine_get_issues();
-
-    if(!root)
-    {
-        fprintf(stderr, "Problem z json_loads\n%d\t%s\n", error.line, error.text);
-        return -1;
-    }
-    json_t *issues;
-    if((!(issues=json_object_get(root, "issues"))) || (!json_is_array(issues)))
-    {
-        fprintf(stderr, "Blad pobierania danych\n");
-        return -1;
-    }
+    json_t *issues = curl_redmine_get_issues();
     size_t index;
     json_t *value;
     json_array_foreach(issues, index, value)
@@ -86,7 +70,7 @@ created:\t%s\n\n",
             );
 
     }
-    json_decref(root);
+//    json_decref(root);
     curl_redmine_cleanup();
     return 0;
 }
